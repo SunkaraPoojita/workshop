@@ -58,24 +58,6 @@ Successfully built 7d692d619894
 Successfully tagged datawire/hello-world:latest
 ```
 
-### Run it in Docker
-
-Build the image first, then launch it using `docker run`.
-
-```shell
-$ docker run --rm -it -p 8000:8000 datawire/hello-world
- * Serving Flask app "server" (lazy loading)
- * Environment: production
-   WARNING: Do not use the development server in a production environment.
-   Use a production WSGI server instead.
- * Debug mode: on
- * Running on http://0.0.0.0:8000/ (Press CTRL+C to quit)
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 121-217-524
-172.17.0.1 - - [03/Apr/2019 17:04:59] "GET / HTTP/1.1" 200 -
-```
-
 ### Run it in Kubernetes
 
 Build and push the image first, then launch it using `kubectl run`.
