@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: hw-pv-claim
+  labels:
+    app: helloworld
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: apps/v1
+#apiVersion: apps/v1beta1 # done for K8S version > 1.16
+kind: Deployment
+metadata:
+  name: hello-k8s-deployment
+spec:
+  selector:
+    matchLabels:
+      app: helloworld
+  replicas: 1 # deployment runs 1 pods matching the template
+  template: # create pods using pod definition in this template
+    metadata:
+      labels:
+        app: helloworld
+    spec:
+      containers:
+      - name: helloworld
+        image: karthequian/helloworld:latest
+        ports:
+        - containerPort: 80 #Endpoint is at port 80 in the container
+        volumeMounts:
+        - name: hw-persistent-storage
+          mountPath: /var/opt
+      volumes:
+      - name: hw-persistent-storage
+        persistentVolumeClaim:
+          claimName: hw-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-k8s-service
+spec:
+  type: NodePort #Exposes the service as a node port
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: helloworld
